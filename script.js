@@ -1,11 +1,11 @@
 let expenseAmount = [];
 let balanceAmount = 0;
-let expenseItems = [];
 let amount;
 let message;
 let expenseType;
 let balanceAmountSelector;
 let expendituresDiv;
+let filterValue;
 window.addEventListener('load', loadData);
 
 function loadData() {
@@ -14,19 +14,18 @@ function loadData() {
     expenseType = document.getElementsByName('expenseType');
     balanceAmountSelector = document.querySelector('#balanceAmount');
     expendituresDiv = document.querySelector('#expenditures');
+    filterValue = document.getElementById('filter');
     balanceAmountSelector.innerHTML = 0;
     loadInitialData();
 }
 
 function loadInitialData() {
     const storedData = JSON.parse(localStorage.getItem('expenseData')) || [];
-    const expenseElement = [];
+    expenseAmount = [...storedData];
+    renderExpenseItems(storedData);
     storedData.forEach(element => {
-        const expenseDiv = `<div>${element.amount} ${element.expenseType === 'expenditure' ? 'spent on' : 'earned from'} ${element.message}</div>`;
-        expenseElement.push(expenseDiv);
         updateAmount(element.amount,element.expenseType);
     });
-    expendituresDiv.insertAdjacentHTML('afterbegin', expenseElement.join(''));
 }
 
 function updateAmount(amount, expenseType) {
@@ -42,34 +41,54 @@ function amountSubmitted() {
     if (!(amount.value && message.value)) {
         return;
     }
-    updateAmount(amount.value, expenseType[0].checked ? 'expenditure':'income');
-    if (expenseType[0].checked) {
-        balanceAmount -= parseInt(amount.value);
-    } else {
-        balanceAmount += parseInt(amount.value);
+    const expenseObj = {
+        amount: amount.value,
+        message: message.value,
+        expenseType : expenseType[0].checked ? 'expenditure' : 'income'
     }
-    expenseAmount.unshift(amount.value);
-    saveData(amount.value,message.value, expenseType);
-    loadExpenseItem(amount.value,message.value,expenseType);
+    expenseAmount.unshift(expenseObj);
+    updateAmount(expenseObj.amount, expenseType[0].checked ? 'expenditure':'income');
+    saveData(expenseObj.amount,expenseObj.message, expenseObj.expenseType);
+    if (filterValue.value==='all' ||  filterValue.value=== expenseObj.expenseType)
+    { 
+        renderExpenseItems([expenseObj]);
+    }
+    resetForm();
 }
 
 function saveData(amount, message, expenseType) {
     const storedData = JSON.parse(localStorage.getItem('expenseData')) || [];
-    storedData.push({
+    storedData.unshift({
         amount,
         message,
-        expenseType : expenseType[0].checked ? 'expenditure' : 'income'
+        expenseType
     });
     localStorage.setItem('expenseData', JSON.stringify(storedData));
 }
 
-function loadExpenseItem(amount,message, expenseType) {
-    const expenseDiv = `<div>${amount} ${expenseType[0].checked ? 'spent on' : 'earned from'} ${message}</div>`;
-    expendituresDiv && expendituresDiv.insertAdjacentHTML('afterbegin', expenseDiv);
-    resetForm();
+function renderExpenseItems(items) {
+    const expenseItems = [];
+    items.forEach((item) => {
+        const expenseDiv = `<div>${item.amount} ${item.expenseType === 'expenditure' ? 'spent on' : 'earned from'} ${item.message}</div>`;
+        expenseItems.push(expenseDiv);
+    });
+    expendituresDiv.insertAdjacentHTML('afterbegin', expenseItems.join(''));
 }
 
 function resetForm() {
     amount.value = '';
     message.value = '';
+}
+
+function applyFilter() {
+    expendituresDiv.innerHTML = '';
+    if (filterValue.value==='expenditure') {
+        const filteredExpenseAmount  = expenseAmount.filter((item) => item.expenseType === 'expenditure');
+        renderExpenseItems(filteredExpenseAmount);
+    } else if (filterValue.value==='income') {
+        const filteredExpenseAmount  = expenseAmount.filter((item) => item.expenseType === 'income');
+        renderExpenseItems(filteredExpenseAmount);
+    } else {
+        renderExpenseItems(expenseAmount);
+    }
 }

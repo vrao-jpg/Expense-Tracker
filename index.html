@@ -10,14 +10,23 @@
         <div class="inputFields marginTop20">
             <div class="field">Amount : <input type="number" name="amount" id="amount"></div>
             <div class="field">Message : <textarea name="message" id="message" row="5" col="20"></textarea></div>
+            <div class="field">
+                <input type="radio" name="expenseType" id="expenseType" checked value="expenditure"> Expenditure 
+                <input type="radio" name="expenseType" id="expenseType" value="income"> Income
+            </div>
             <div class="field submit"><input type="button" onclick="amountSubmitted()" value="submit"></div>
         </div>
-        <div class="marginTop20">
-            <input type="radio" name="expenseType" id="expenseType" checked value="expenditure"> Expenditure 
-            <input type="radio" name="expenseType" id="expenseType" value="income"> Income
-        </div>
-        <div class="expenditures" id=expenditures>
 
+        <div class="marginTop20">
+            <span>Filter expenditure's</span>
+            <select name="filter" id="filter" onchange="applyFilter()">
+                <option value="all">All</option>
+                <option value="expenditure">Expenditure</option>>
+                <option value="income">Income</option>
+            </select>
+        </div>
+
+        <div class="expenditures" id=expenditures>
         </div>
     </body>
 </html>
