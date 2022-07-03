@@ -1,32 +1,39 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <script src="./script.js"></script>
+        <script defer src="./script.js"></script>
         <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     </head>
-    <body>
-        <h1>Expense Tracker</h1>
-        <div>Balance Amount: <span id="balanceAmount"></span></div>
-        <div class="inputFields marginTop20">
-            <div class="field">Amount : <input type="number" name="amount" id="amount"></div>
-            <div class="field">Message : <textarea name="message" id="message" row="5" col="20"></textarea></div>
-            <div class="field">
-                <input type="radio" name="expenseType" id="expenseType" checked value="expenditure"> Expenditure 
-                <input type="radio" name="expenseType" id="expenseType" value="income"> Income
-            </div>
-            <div class="field submit"><input type="button" onclick="amountSubmitted()" value="submit"></div>
-        </div>
+    <body>  
+        <header>
+            <h1>Expense Tracker</h1>
+        </header>
+        <section>
+            <div>Balance Amount: <span id="balanceAmount"></span></div>
+            <form action="javascript:amountSubmitted()" class="input marginTop20">
+                <div class="input__field">Amount : <input type="number" name="amount" id="amount"></div>
+                <span class="input__error" id="amountError"></span>
+                <div class="input__field">Message : <textarea name="message" id="message" row="5" col="20"></textarea></div>
+                <span class="input__error" id="messageError"></span>
+                <div class="input__field">
+                    <input type="radio" name="expenseType" id="expenseType" checked value="expenditure"> Expenditure 
+                    <input type="radio" name="expenseType" id="expenseType" value="income"> Income
+                </div>
+                <div class="input__field"><input type="submit" value="submit"></div>
+            </form>
+        </section>
 
-        <div class="marginTop20">
+        <section class="marginTop20">
             <span>Filter expenditure's</span>
             <select name="filter" id="filter" onchange="applyFilter()">
                 <option value="all">All</option>
                 <option value="expenditure">Expenditure</option>>
                 <option value="income">Income</option>
             </select>
-        </div>
+        </section>
 
-        <div class="expenditures" id=expenditures>
-        </div>
+        <section class="expenditures" id=expenditures>
+        </section>
     </body>
 </html>

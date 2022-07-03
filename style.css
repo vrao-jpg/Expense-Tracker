@@ -1,19 +1,35 @@
-
-.marginTop20 {
+  .marginTop20 {
     margin-top: 20px;
-  }
-  
+  }  
   .expenditures {
     margin-top: 10px;
   }
-  
-  .inputFields {
+  .input {
     display: flex;
     flex-direction: column;
     max-width: 300px;
   }
-  .field {
+  .input__error {
+    color: red;
+  }
+  .input__field {
     margin-top: 10px;
   }
-  .submit {
+  .expenditures__item {
+    width: 100%;
+    height: 30px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding-left: 10px;
+  }
+  .expenditures__item--earned {
+    background-color: #a1dfa1;
+  }
+  .expenditures__item--spent {
+    background-color: #e19898;
+  }
+  .expenditures__edit {
+    margin-left:20px;
+    cursor: pointer;
   }
